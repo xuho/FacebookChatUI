@@ -1,32 +1,12 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, StatusBar, Image, TouchableOpacity, TextInput, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import MDIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CommonHeader from '../../ui_components/CommonHeader';
 import SearchInput from '../../ui_components/SearchInput';
-
-const listConversations = [
-    {
-        avatar: 'https://pngimage.net/wp-content/uploads/2018/05/avatar-perfil-png-1.png',
-        name: 'Phạm Bình',
-        lastMessage: 'Hello Bình',
-        lastTime: '15:34',
-        isSeen: true
-    },
-    {
-        avatar: 'https://i7.pngguru.com/preview/348/800/890/computer-icons-avatar-user-login-avatar-thumbnail.jpg',
-        name: 'Nguyễn Doãn Huyển',
-        lastMessage: 'Xin chào Hòa',
-        lastTime: 'Thứ 2',
-    },
-    {
-        avatar: 'https://img.pngio.com/fileavatar-poe84itpng-avatar-png-580_580.png',
-        name: 'Quyết Trần',
-        lastMessage: 'Hello',
-        lastTime: 'CN'
-    },
-];
+import { UserItem } from './UserItem';
+import { ConversationItem } from './ConversationItem';
+import { listConversations, users } from './mockData';
 // create a component
 class Chat extends Component {
 
@@ -46,19 +26,17 @@ class Chat extends Component {
         );
     }
 
-    render() {
+    renderHeader = () => {
         return (
-            <ScrollView style={styles.container}>
-                <StatusBar barStyle='light-content' />
+            <View>
                 <CommonHeader
                     title='Chat'
                     leftIcon='camera-enhance'
                     rightIcon='pencil'
                 />
                 <SearchInput />
-
                 <View style={{ marginVertical: 8 }}>
-                    <ScrollView horizontal style={{ marginVertical: 16, paddingHorizontal: 16 }}>
+                    <ScrollView horizontal style={{ marginVertical: 16 }}>
                         <View style={{ marginRight: 8 }}>
                             <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#333333', flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon name='ios-add' color='#fff' size={45} style={{ flex: 1, textAlign: 'center', marginTop: 4 }} />
@@ -69,85 +47,38 @@ class Chat extends Component {
                                 Tin của bạn
                         </Text>
                         </View>
-                        <UserItem name='Bình' avatar='https://pngimage.net/wp-content/uploads/2018/05/avatar-perfil-png-1.png' isOnline />
-                        <UserItem name='Huyên' avatar='https://i7.pngguru.com/preview/348/800/890/computer-icons-avatar-user-login-avatar-thumbnail.jpg' />
-                        <UserItem name='Quyết' avatar='https://img.pngio.com/fileavatar-poe84itpng-avatar-png-580_580.png' isOnline />
+                        {
+                            users.map((user, index) => {
+                                let { name, avatar, isOnline } = user;
+                                return (
+                                    <UserItem
+                                        key={`${name}-${index}`}
+                                        name={name}
+                                        avatar={avatar}
+                                        isOnline={isOnline} />
+                                );
+                            })
+                        }
                     </ScrollView>
                 </View>
+            </View>
+        );
+    }
 
+    render() {
+        return (
+            <View style={styles.container}>
+                <StatusBar barStyle='light-content' />
                 <FlatList
-                    scrollEnabled={false}
+                    ListHeaderComponent={this.renderHeader}
                     style={{ paddingHorizontal: 16 }}
                     data={listConversations}
                     keyExtractor={this.keyExtractor}
                     renderItem={this.renderItem}
                 />
-
-            </ScrollView>
+            </View>
         );
     }
-}
-
-
-const UserItem = ({ avatar, name, isOnline }) => {
-    return (
-        <View style={{ marginHorizontal: 8 }}>
-            {
-                isOnline
-                    ? <View style={{
-                        width: 16, height: 16, borderRadius: 8, backgroundColor: '#6cd64f',
-                        position: 'absolute', top: 50, right: 8, zIndex: 1000, borderWidth: 3, borderColor: '#000'
-                    }} />
-                    : null
-            }
-            <View style={{ width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: '#fff', overflow: 'hidden' }}>
-                <Image source={{
-                    uri: avatar
-                }}
-                    style={{ flex: 1, overflow: 'hidden' }} />
-            </View>
-            <Text
-                numberOfLines={1} ellipsizeMode='tail'
-                style={{ width: 60, fontSize: 14, color: '#fff', marginTop: 8, textAlign: 'center' }}>
-                {name}
-            </Text>
-        </View>
-    );
-}
-
-const ConversationItem = ({ name, avatar, lastMessage, isSeen, lastTime }) => {
-    return (
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-            <View style={{ width: 70, height: 70, borderRadius: 35, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginRight: 16 }}>
-                <Image source={{
-                    uri: avatar
-                }}
-                    style={{ flex: 1, overflow: 'hidden' }} />
-            </View>
-            <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff' }}>
-                    {name}
-                </Text>
-                <View style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'gray', marginRight: 8 }} numberOfLines={1} ellipsizeMode='tail'>
-                        {lastMessage}
-                    </Text>
-                    <Text style={{ fontSize: 14, color: 'gray' }}>
-                        {lastTime}
-                    </Text>
-                </View>
-            </View>
-            {
-                isSeen
-                    ? <Image style={{ width: 16, height: 16, borderRadius: 8, marginLeft: 16 }}
-                        source={{ uri: avatar }}
-                    />
-                    : <View
-                        style={{ width: 16, height: 16, borderRadius: 8, marginLeft: 16, backgroundColor: 'transparent' }}
-                    />
-            }
-        </View>
-    );
 }
 
 const AVATAR_SIZE = 45;

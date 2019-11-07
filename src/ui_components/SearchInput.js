@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // create a component
 const SearchInput = () => {
     return (
-        <View style={styles.container}>
+        <View>
             <View style={styles.inputWrapper}>
                 <Icon name='ios-search' size={20} color='#fff' />
                 <TextInput
@@ -21,9 +21,6 @@ const SearchInput = () => {
 
 // define your styles
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 16
-    },
     inputWrapper: {
         height: 40, width: '100%', borderRadius: 20, backgroundColor: '#333333',
         paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center',

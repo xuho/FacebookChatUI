@@ -32,7 +32,7 @@ const CommonHeader = ({ title, leftIcon, rightIcon }) => {
 const AVATAR_SIZE = 45;
 // define your styles
 const styles = StyleSheet.create({
-    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16 },
+    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 16 },
     leftHeader: { flex: 1, flexDirection: 'row', alignItems: 'center' },
     rightHeader: { flexDirection: 'row', flexDirection: 'row' },
     avatar: {
